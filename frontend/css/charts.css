@@ -1,0 +1,269 @@
+/* F1 Plots - Chart Styles */
+
+/* SVG Styles */
+.chart svg {
+    font-family: var(--font-family);
+}
+
+/* Axes */
+.axis path,
+.axis line {
+    stroke: var(--color-border);
+}
+
+.axis text {
+    fill: var(--color-text-muted);
+    font-size: 11px;
+}
+
+.axis-label {
+    fill: var(--color-text-muted);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Grid Lines */
+.grid line {
+    stroke: var(--color-border);
+    stroke-opacity: 0.3;
+    stroke-dasharray: 2, 2;
+}
+
+.grid path {
+    stroke-width: 0;
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    max-width: 250px;
+}
+
+.tooltip-title {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+}
+
+.tooltip-content {
+    color: var(--color-text-muted);
+}
+
+.tooltip-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+}
+
+.tooltip-label {
+    color: var(--color-text-muted);
+}
+
+.tooltip-value {
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+/* Lap Times Chart */
+.lap-point {
+    cursor: pointer;
+    transition: r 0.2s ease;
+}
+
+.lap-point:hover {
+    r: 6;
+}
+
+.driver-line {
+    fill: none;
+    stroke-width: 2;
+    opacity: 0.8;
+}
+
+.driver-line:hover {
+    stroke-width: 3;
+    opacity: 1;
+}
+
+/* Strategy Chart */
+.stint-bar {
+    cursor: pointer;
+    stroke: var(--color-bg);
+    stroke-width: 1;
+    transition: opacity 0.2s ease;
+}
+
+.stint-bar:hover {
+    opacity: 0.8;
+}
+
+.stint-label {
+    font-size: 10px;
+    font-weight: 600;
+    pointer-events: none;
+    fill: var(--color-bg);
+}
+
+.driver-label {
+    font-size: 12px;
+    fill: var(--color-text);
+    font-weight: 500;
+}
+
+/* Compound colors */
+.compound-soft { fill: var(--compound-soft); }
+.compound-medium { fill: var(--compound-medium); }
+.compound-hard { fill: var(--compound-hard); }
+.compound-intermediate { fill: var(--compound-intermediate); }
+.compound-wet { fill: var(--compound-wet); }
+.compound-unknown { fill: #888888; }
+
+/* Telemetry Chart */
+.speed-line {
+    fill: none;
+    stroke-width: 2;
+}
+
+.throttle-area {
+    opacity: 0.3;
+}
+
+.brake-area {
+    fill: var(--color-primary);
+    opacity: 0.5;
+}
+
+.gear-text {
+    font-size: 10px;
+    fill: var(--color-text-muted);
+}
+
+/* DRS Zone */
+.drs-zone {
+    fill: var(--color-accent);
+    opacity: 0.2;
+}
+
+/* Race Pace Chart */
+.pace-box {
+    stroke: var(--color-border);
+    stroke-width: 1;
+}
+
+.pace-median {
+    stroke-width: 2;
+}
+
+.pace-whisker {
+    stroke: var(--color-text-muted);
+    stroke-width: 1;
+}
+
+/* Position Chart */
+.position-line {
+    fill: none;
+    stroke-width: 2;
+    opacity: 0.8;
+}
+
+.position-dot {
+    stroke: var(--color-bg);
+    stroke-width: 1;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.legend-line {
+    width: 20px;
+    height: 3px;
+    border-radius: 1px;
+}
+
+/* Brush Selection */
+.brush .selection {
+    fill: var(--color-accent);
+    fill-opacity: 0.2;
+    stroke: var(--color-accent);
+}
+
+/* Focus Line */
+.focus-line {
+    stroke: var(--color-text-muted);
+    stroke-width: 1;
+    stroke-dasharray: 4, 4;
+    opacity: 0.5;
+}
+
+/* Chart Title */
+.chart-title {
+    fill: var(--color-text);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* No Data Message */
+.no-data-message {
+    fill: var(--color-text-muted);
+    font-size: 14px;
+    text-anchor: middle;
+}
+
+/* Animation */
+.animate-in {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive chart adjustments */
+@media (max-width: 768px) {
+    .chart {
+        min-height: 300px;
+    }
+
+    .axis text {
+        font-size: 10px;
+    }
+
+    .driver-label {
+        font-size: 10px;
+    }
+}
