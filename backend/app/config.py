@@ -57,14 +57,8 @@ class Settings(BaseSettings):
 
     # CORS Settings - SECURE DEFAULTS
     # In production, set F1_CORS_ORIGINS to your actual domain(s)
-    cors_origins: list[str] = [
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "http://localhost:8080",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:8000",
-        "http://127.0.0.1:8080",
-    ]
+    # Use str type to avoid pydantic-settings parsing issues, parsed in validator
+    cors_origins: str | list[str] = "http://localhost:3000,http://localhost:8000,http://localhost:8080,http://127.0.0.1:3000,http://127.0.0.1:8000,http://127.0.0.1:8080"
     # Don't allow credentials with wildcards - security risk
     cors_allow_credentials: bool = False
     # Only allow specific methods, not wildcards
@@ -98,7 +92,7 @@ class Settings(BaseSettings):
             return [k.strip() for k in v.split(",") if k.strip()]
         return v or []
 
-    @field_validator("cors_origins", mode="before")
+    @field_validator("cors_origins", mode="after")
     @classmethod
     def parse_cors_origins(cls, v):
         """Parse CORS origins from string or list."""
