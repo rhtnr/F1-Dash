@@ -82,4 +82,5 @@ package-lock.json
 # ML models
 *.pkl
 *.joblib
-models/
+/models/
+backend/models/
