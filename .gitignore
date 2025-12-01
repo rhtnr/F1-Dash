@@ -46,13 +46,22 @@ htmlcov/
 .dmypy.json
 dmypy.json
 
-# Data and cache
-backend/data/
+# Data and cache (exclude large data directories)
 data/
 *.parquet
-*.json
-!package.json
-!tsconfig.json
+
+# Backend data directories - exclude everything except models
+backend/data/cache/
+backend/data/fastf1_cache/
+backend/data/drivers/
+backend/data/indexes/
+backend/data/laps/
+backend/data/sessions/
+backend/data/stints/
+backend/data/telemetry/
+backend/data/models/training_data.csv
+backend/data/models/error_analysis.csv
+backend/data/models/boosters.json
 
 # FastF1 cache
 ff1_cache/
@@ -79,8 +88,8 @@ package-lock.json
 # Playwright MCP
 .playwright-mcp/
 
-# ML models
+# ML models (pkl files are not needed)
 *.pkl
-*.joblib
 /models/
 backend/models/
+# Note: backend/data/models/*.joblib files ARE tracked for production deployment
