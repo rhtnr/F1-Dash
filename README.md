@@ -1,41 +1,49 @@
-# F1-Dash
+# 🏎️ F1-Dash
+
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge&logo=render)](https://f1-dash.live/)
+[![Python](https://img.shields.io/badge/python-3.11+-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)](https://d3js.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/rhtnr)
 
 A Python-backed D3.js web application for F1 enthusiasts to visualize lap times, tire strategies, driver/team performance, telemetry, and race analytics with ML-powered race predictions.
 
-**Live Demo:** [https://f1-dash.live/](https://f1-dash.live/)
+**🌐 Live Demo:** [https://f1-dash.live/](https://f1-dash.live/)
 
-## Features
+## ✨ Features
 
-- **Lap Time Analysis** - Scatter plots, box plots, lap-by-lap progression with outlier filtering
-- **Tire Strategy Visualization** - Stint bars with compound colors, pit stop timing
-- **Telemetry Overlays** - Speed traces, throttle/brake, gear shifts, multi-channel comparison
-- **Driver Comparisons** - Head-to-head lap times, sector comparisons
-- **Race Progression** - Position changes over laps, gap analysis
-- **Stint Analysis** - Tire degradation curves, compound performance
-- **Race Predictions (ML)** - XGBoost-powered race predictions based on practice session data
+- 📊 **Lap Time Analysis** - Scatter plots, box plots, lap-by-lap progression with outlier filtering
+- 🛞 **Tire Strategy Visualization** - Stint bars with compound colors, pit stop timing
+- 📈 **Telemetry Overlays** - Speed traces, throttle/brake, gear shifts, multi-channel comparison
+- 🏁 **Driver Comparisons** - Head-to-head lap times, sector comparisons
+- 📉 **Race Progression** - Position changes over laps, gap analysis
+- ⏱️ **Stint Analysis** - Tire degradation curves, compound performance
+- 🤖 **Race Predictions (ML)** - XGBoost-powered race predictions based on practice session data
 
-## Architecture
+## 🏗️ Architecture
 
 ```mermaid
 flowchart TB
-    subgraph Frontend["Frontend (Static Site)"]
+    subgraph Frontend["🖥️ Frontend (Static Site)"]
         UI[D3.js Visualizations]
         API_Client[API Client]
     end
 
-    subgraph Backend["Backend (FastAPI)"]
+    subgraph Backend["⚙️ Backend (FastAPI)"]
         Routes[API Routes]
         Services[Service Layer]
         Repos[Repository Layer]
         ML[ML Prediction Service]
     end
 
-    subgraph External["External Data"]
+    subgraph External["🌐 External Data"]
         FastF1[FastF1 API]
         F1_Official[F1 Timing Data]
     end
 
-    subgraph Storage["Storage"]
+    subgraph Storage["💾 Storage"]
         FileStore[File Storage JSON]
         Cache[FastF1 Cache]
         Models[ML Models]
@@ -53,7 +61,7 @@ flowchart TB
     ML --> Models
 ```
 
-### Component Flow
+### 🔄 Component Flow
 
 ```mermaid
 sequenceDiagram
@@ -79,21 +87,21 @@ sequenceDiagram
     Frontend->>User: Render D3 Chart
 ```
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 ### Backend
-- **FastAPI** - Modern Python web framework with async support
-- **FastF1** - F1 data access library (2018+ seasons)
-- **Pydantic** - Data validation and serialization
-- **XGBoost** - Machine learning for race predictions
-- **Repository Pattern** - Pluggable storage (file-based JSON, ready for DynamoDB)
+- ⚡ **FastAPI** - Modern Python web framework with async support
+- 🏎️ **FastF1** - F1 data access library (2018+ seasons)
+- ✅ **Pydantic** - Data validation and serialization
+- 🤖 **XGBoost** - Machine learning for race predictions
+- 🗄️ **Repository Pattern** - Pluggable storage (file-based JSON, ready for DynamoDB)
 
 ### Frontend
-- **D3.js** - Data visualization library
-- **Vanilla JavaScript** - No framework dependencies
-- **ES Modules** - Modern JavaScript architecture
+- 📊 **D3.js** - Data visualization library
+- 🌐 **Vanilla JavaScript** - No framework dependencies
+- 📦 **ES Modules** - Modern JavaScript architecture
 
-### Security
+### 🔒 Security
 - Security headers middleware (CSP, X-Frame-Options, etc.)
 - Rate limiting (100 req/min API, 5 req/min ingestion)
 - CORS configuration with explicit origins
@@ -101,11 +109,11 @@ sequenceDiagram
 - XSS prevention (safe DOM manipulation)
 - Path traversal protection
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.11+
-- Node.js (optional, for frontend development server)
+- 🐍 Python 3.11+
+- 📦 Node.js (optional, for frontend development server)
 
 ### Backend Setup
 
@@ -127,9 +135,9 @@ uvicorn app.main:app --reload
 ```
 
 The API will be available at `http://localhost:8000`
-- API Documentation: `http://localhost:8000/docs`
-- OpenAPI Schema: `http://localhost:8000/openapi.json`
-- Health Check: `http://localhost:8000/health`
+- 📚 API Documentation: `http://localhost:8000/docs`
+- 📋 OpenAPI Schema: `http://localhost:8000/openapi.json`
+- 💚 Health Check: `http://localhost:8000/health`
 
 ### Frontend Setup
 
@@ -145,16 +153,16 @@ npx serve -l 3000
 
 The frontend will be available at `http://localhost:3000`
 
-## Deployment
+## ☁️ Deployment
 
 ### Render (Recommended)
 
 This project includes a `render.yaml` blueprint for easy deployment:
 
-1. Push your code to GitHub
-2. Go to [render.com](https://render.com) and create a new Blueprint
-3. Connect your GitHub repository
-4. Render will auto-detect the `render.yaml` and create both services
+1. 📤 Push your code to GitHub
+2. 🌐 Go to [render.com](https://render.com) and create a new Blueprint
+3. 🔗 Connect your GitHub repository
+4. ✨ Render will auto-detect the `render.yaml` and create both services
 
 After deployment, configure environment variables in the Render dashboard:
 - `F1_CORS_ORIGINS` - Your frontend URL (e.g., `https://f1-dash.live`)
@@ -165,7 +173,7 @@ Update `frontend/config.js` with your backend URL:
 window.F1_API_URL = 'https://f1-dash-api.onrender.com/api/v1';
 ```
 
-### Environment Variables
+### ⚙️ Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -176,48 +184,48 @@ window.F1_API_URL = 'https://f1-dash-api.onrender.com/api/v1';
 | `F1_RATE_LIMIT_ENABLED` | Enable rate limiting | `true` |
 | `F1_TRUSTED_HOSTS` | Allowed hosts (production) | `localhost` |
 
-## API Endpoints
+## 📡 API Endpoints
 
-### Schedule (FastF1 Available Data)
+### 📅 Schedule (FastF1 Available Data)
 - `GET /api/v1/schedule/years` - Get available years
 - `GET /api/v1/schedule/events/{year}` - Get events for a year
 - `GET /api/v1/schedule/sessions/{year}/{round}` - Get sessions for an event
 
-### Sessions (Ingested Data)
+### 🏁 Sessions (Ingested Data)
 - `GET /api/v1/sessions` - List sessions (filterable by year)
 - `GET /api/v1/sessions/years` - Get available years
 - `GET /api/v1/sessions/events/{year}` - Get events for a year
 - `GET /api/v1/sessions/id/{session_id}` - Get specific session
 - `GET /api/v1/sessions/{year}/{round}` - Get event sessions
 
-### Laps
+### ⏱️ Laps
 - `GET /api/v1/laps/{session_id}` - Get session laps
 - `GET /api/v1/laps/{session_id}/fastest` - Get fastest laps
 - `GET /api/v1/laps/{session_id}/distribution` - Lap time distribution
 - `GET /api/v1/laps/{session_id}/compound-performance` - Compound analysis
 
-### Strategy
+### 🛞 Strategy
 - `GET /api/v1/strategy/{session_id}/stints` - Get tire stints
 - `GET /api/v1/strategy/{session_id}/summary` - Strategy summary
 
-### Telemetry
+### 📈 Telemetry
 - `GET /api/v1/telemetry/{session_id}/{driver}/{lap}` - Get lap telemetry
 - `POST /api/v1/telemetry/{session_id}/compare` - Compare multiple laps
 
-### Predictions (ML)
+### 🤖 Predictions (ML)
 - `GET /api/v1/predictions/race/{year}/{round}` - Get race prediction
 - `GET /api/v1/predictions/backtest/{year}/{round}` - Backtest with actual results
 - `GET /api/v1/predictions/model/info` - Model status and info
 - `POST /api/v1/predictions/train` - Train the prediction model
 
-### Data Ingestion
+### 📥 Data Ingestion
 - `GET /api/v1/ingest/status/{year}/{round}/{session}` - Check ingestion status
 - `POST /api/v1/ingest/session` - Ingest session data
 - `POST /api/v1/ingest/telemetry` - Ingest telemetry data
 
-## Development
+## 👨‍💻 Development
 
-### Running Tests
+### 🧪 Running Tests
 
 ```bash
 cd backend
@@ -233,7 +241,7 @@ pytest --cov=app
 pytest tests/unit/test_services.py -v
 ```
 
-### Project Structure
+### 📁 Project Structure
 
 ```
 f1-dash/
@@ -270,32 +278,32 @@ f1-dash/
         └── utils/           # Utilities (colors, formatters, security)
 ```
 
-## ML Predictions
+## 🤖 ML Predictions
 
 The prediction model uses XGBoost trained on historical race data (2023-2024 seasons):
 
-**Features (15 total):**
+**📊 Features (15 total):**
 - Best lap delta, average pace delta, consistency (std dev) for FP1, FP2, FP3
 - Session positions for each practice session
 - Long run pace delta for each session
 
-**Model Performance:**
+**📈 Model Performance:**
 - MAE: ~0.49 positions (training data)
 - 87% of predictions within 1 position
 
 Pre-trained model files are included in `backend/data/models/` for production deployment.
 
-## Data Sources
+## 📊 Data Sources
 
 Data is fetched from the official F1 timing system via the [FastF1](https://github.com/theOehrly/Fast-F1) library. Available data includes:
-- Sessions from 2018 onwards
-- Lap timing and sector times
-- Tire compound and stint information
-- Car telemetry (speed, throttle, brake, gear)
-- Weather conditions
-- Race control messages
+- 📅 Sessions from 2018 onwards
+- ⏱️ Lap timing and sector times
+- 🛞 Tire compound and stint information
+- 📈 Car telemetry (speed, throttle, brake, gear)
+- 🌤️ Weather conditions
+- 🚩 Race control messages
 
-## Security Considerations
+## 🔒 Security Considerations
 
 For production deployment:
 - Set `F1_ENVIRONMENT=production`
@@ -304,6 +312,12 @@ For production deployment:
 - Use HTTPS (handled automatically by Render)
 - Review and configure `F1_TRUSTED_HOSTS`
 
-## License
+## 💖 Support
+
+If you find this project useful, consider supporting its development:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/rhtnr)
+
+## 📄 License
 
 MIT
