@@ -75,7 +75,8 @@ class Settings(BaseSettings):
     # API keys for protected endpoints (comma-separated in env var)
     api_keys: str = ""
     # Trusted hosts (for production, set to your domain)
-    trusted_hosts: str = "localhost,127.0.0.1"
+    # Include wildcard for render.com health checks
+    trusted_hosts: str = "localhost,127.0.0.1,*.onrender.com"
     # Enable rate limiting
     rate_limit_enabled: bool = True
     # Enable API key authentication for protected endpoints
