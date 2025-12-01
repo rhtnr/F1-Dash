@@ -102,14 +102,24 @@ class Settings(BaseSettings):
     @classmethod
     def parse_cors_origins(cls, v):
         """Parse CORS origins from string or list."""
+        if v is None:
+            return []
+        if isinstance(v, list):
+            return v
         if isinstance(v, str):
+            v = v.strip()
+            if not v:
+                return []
             # Handle JSON-like string
             if v.startswith("["):
                 import json
-                return json.loads(v)
+                try:
+                    return json.loads(v)
+                except json.JSONDecodeError:
+                    pass
             # Handle comma-separated string
             return [o.strip() for o in v.split(",") if o.strip()]
-        return v
+        return []
 
     @field_validator("trusted_hosts", mode="before")
     @classmethod
