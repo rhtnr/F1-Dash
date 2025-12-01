@@ -8,6 +8,7 @@ pydantic-settings>=2.1.0
 fastf1>=3.3.0
 pandas>=2.1.0
 numpy>=1.26.0
+scikit-learn>=1.4.0
 
 # Async file handling
 aiofiles>=23.2.0
