@@ -1,9 +1,11 @@
 /**
- * F1 Plots API Client
+ * F1-Dash API Client
  * Handles all communication with the FastAPI backend
  */
 
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+// Use environment-based API URL or default to localhost for development
+// In production, set this via a config.js file or environment variable
+const API_BASE_URL = window.F1_API_URL || 'http://localhost:8000/api/v1';
 
 class F1ApiClient {
     constructor(baseUrl = API_BASE_URL) {

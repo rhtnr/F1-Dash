@@ -1,5 +1,5 @@
 /**
- * F1 Plots - Main Application
+ * F1-Dash - Main Application
  */
 
 import { api } from './api/client.js';
@@ -24,7 +24,7 @@ import {
     sanitizeNumber,
 } from './utils/security.js';
 
-class F1PlotsApp {
+class F1DashApp {
     constructor() {
         // State
         this.currentSession = null;
@@ -46,7 +46,7 @@ class F1PlotsApp {
     }
 
     async init() {
-        console.log('Initializing F1 Plots...');
+        console.log('Initializing F1-Dash...');
 
         // Parse URL parameters first
         this.parseUrlParams();
@@ -1028,5 +1028,5 @@ class F1PlotsApp {
 
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    window.f1App = new F1PlotsApp();
+    window.f1App = new F1DashApp();
 });

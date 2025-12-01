@@ -1,1 +1,1 @@
-"""F1 Plots API Tests."""
+"""F1-Dash API Tests."""

@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     )
 
     # API Settings
-    app_name: str = "F1 Plots API"
+    app_name: str = "F1-Dash API"
     app_version: str = "0.1.0"
     debug: bool = False
     api_v1_prefix: str = "/api/v1"

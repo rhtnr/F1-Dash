@@ -1,0 +1,39 @@
+services:
+  # Backend API
+  - type: web
+    name: f1-dash-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: F1_ENVIRONMENT
+        value: production
+      - key: F1_CORS_ORIGINS
+        sync: false  # Set manually in dashboard
+      - key: F1_API_KEYS
+        sync: false  # Set manually in dashboard (optional)
+      - key: PYTHON_VERSION
+        value: "3.11"
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Frontend static site
+  - type: web
+    name: f1-dash-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: echo "No build needed"
+    staticPublishPath: .
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    autoDeploy: true

@@ -1,4 +1,4 @@
-"""Middleware modules for the F1 Plots API."""
+"""Middleware modules for the F1-Dash API."""
 
 from app.middleware.security import (
     APIKeyMiddleware,

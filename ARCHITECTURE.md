@@ -1,8 +1,8 @@
-# F1 Data Visualization Application - Architecture Design
+# F1-Dash - Architecture Design
 
 ## Executive Summary
 
-A Python-backed D3.js web application for F1 enthusiasts to visualize lap times, tire strategies, driver/team performance, telemetry, and race analytics. Built with FastAPI, following SOLID principles, with a pluggable storage layer.
+F1-Dash is a Python-backed D3.js web application for F1 enthusiasts to visualize lap times, tire strategies, driver/team performance, telemetry, and race analytics with ML-powered predictions. Built with FastAPI, following SOLID principles, with a pluggable storage layer.
 
 ---
 
@@ -123,7 +123,7 @@ Must-have features for parity:
 ## Directory Structure
 
 ```
-f1-plots/
+f1-dash/
 ├── backend/
 │   ├── app/
 │   │   ├── __init__.py
@@ -958,7 +958,7 @@ class StorageBackend(str, Enum):
 
 class Settings(BaseSettings):
     # API Settings
-    app_name: str = "F1 Plots API"
+    app_name: str = "F1-Dash API"
     debug: bool = False
     api_v1_prefix: str = "/api/v1"
 
@@ -1006,6 +1006,117 @@ python -m http.server 3000
 
 ---
 
+## Security Architecture
+
+### Backend Security Layers
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    INCOMING REQUEST                              │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  TrustedHostMiddleware                           │
+│            (Production only - validates Host header)             │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  SecurityHeadersMiddleware                       │
+│    X-Content-Type-Options | X-Frame-Options | CSP | HSTS        │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  RequestValidationMiddleware                     │
+│              (Request ID, Content-Type validation)               │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    RateLimitMiddleware                           │
+│         /api/: 100/min | /ingest: 5/min | /train: 2/min         │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    APIKeyMiddleware                              │
+│         (Optional - protects /ingest and /train endpoints)       │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      CORSMiddleware                              │
+│              (Explicit origins, no wildcards)                    │
+└─────────────────────────────┬───────────────────────────────────┘
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    FastAPI Router                                │
+│              (Pydantic validation on all inputs)                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Security Features
+
+| Feature | Implementation | Location |
+|---------|---------------|----------|
+| **Security Headers** | CSP, X-Frame-Options, HSTS, etc. | `middleware/security.py` |
+| **Rate Limiting** | In-memory sliding window | `middleware/security.py` |
+| **API Key Auth** | Constant-time comparison | `middleware/security.py` |
+| **Input Validation** | Pydantic schemas with validators | `api/schemas/*.py` |
+| **Path Traversal** | Regex + resolved path check | `repositories/file/base.py` |
+| **XSS Prevention** | Safe DOM methods (no innerHTML) | `frontend/js/utils/security.js` |
+| **Error Handling** | Internal details hidden in prod | `main.py` |
+
+### Frontend Security
+
+```javascript
+// Safe DOM manipulation utilities (frontend/js/utils/security.js)
+export function escapeHtml(text) { ... }
+export function createOption(value, text) { ... }
+export function populateSelect(select, options, placeholder) { ... }
+export function clearElement(element) { ... }
+```
+
+All dynamic content rendering uses `textContent` instead of `innerHTML`.
+
+---
+
+## Deployment Architecture
+
+### Render Deployment
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         RENDER                                   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │               f1-dash-api (Web Service)                  │   │
+│  │  ┌─────────────────────────────────────────────────┐    │   │
+│  │  │  uvicorn app.main:app --host 0.0.0.0 --port $PORT │    │   │
+│  │  │                                                   │    │   │
+│  │  │  Environment:                                     │    │   │
+│  │  │  - F1_ENVIRONMENT=production                      │    │   │
+│  │  │  - F1_CORS_ORIGINS=https://frontend.onrender.com │    │   │
+│  │  │  - F1_API_KEYS=<secret>                          │    │   │
+│  │  └─────────────────────────────────────────────────┘    │   │
+│  │  Health Check: /health                                   │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │            f1-dash-frontend (Static Site)               │   │
+│  │  ┌─────────────────────────────────────────────────┐    │   │
+│  │  │  Static files served from frontend/              │    │   │
+│  │  │  config.js points to API URL                     │    │   │
+│  │  │  SPA routing: /* → /index.html                   │    │   │
+│  │  └─────────────────────────────────────────────────┘    │   │
+│  │  Headers: X-Content-Type-Options, X-Frame-Options       │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Configuration Files
+
+- `render.yaml` - Render blueprint defining both services
+- `frontend/config.js` - Runtime API URL configuration
+- `.env` - Local environment variables (not committed)
+
+---
+
 ## Future Enhancements
 
 1. **DynamoDB Implementation** - Complete the DynamoDB repository for cloud deployment
@@ -1014,6 +1125,8 @@ python -m http.server 3000
 4. **Additional Visualizations** - Track maps, sector analysis, weather overlays
 5. **Mobile Responsive** - Touch-friendly D3.js interactions
 6. **Data Export** - CSV/JSON download of visualized data
+7. **Authentication** - User accounts with JWT tokens
+8. **Caching** - Redis/Memcached for API response caching
 
 ---
 

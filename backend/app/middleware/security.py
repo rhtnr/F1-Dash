@@ -1,4 +1,4 @@
-"""Security middleware for the F1 Plots API."""
+"""Security middleware for the F1-Dash API."""
 
 import hashlib
 import hmac

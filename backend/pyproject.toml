@@ -1,7 +1,7 @@
 [project]
-name = "f1-plots-api"
+name = "f1-dash-api"
 version = "0.1.0"
-description = "F1 Data Visualization API powered by FastF1"
+description = "F1-Dash - Formula 1 Data Visualization API powered by FastF1"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
