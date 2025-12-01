@@ -2,6 +2,8 @@
 
 A Python-backed D3.js web application for F1 enthusiasts to visualize lap times, tire strategies, driver/team performance, telemetry, and race analytics with ML-powered race predictions.
 
+**Live Demo:** [https://f1-dash.live/](https://f1-dash.live/)
+
 ## Features
 
 - **Lap Time Analysis** - Scatter plots, box plots, lap-by-lap progression with outlier filtering
@@ -10,7 +12,72 @@ A Python-backed D3.js web application for F1 enthusiasts to visualize lap times,
 - **Driver Comparisons** - Head-to-head lap times, sector comparisons
 - **Race Progression** - Position changes over laps, gap analysis
 - **Stint Analysis** - Tire degradation curves, compound performance
-- **Race Predictions (ML)** - XGBoost-powered qualifying predictions based on practice sessions
+- **Race Predictions (ML)** - XGBoost-powered race predictions based on practice session data
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph Frontend["Frontend (Static Site)"]
+        UI[D3.js Visualizations]
+        API_Client[API Client]
+    end
+
+    subgraph Backend["Backend (FastAPI)"]
+        Routes[API Routes]
+        Services[Service Layer]
+        Repos[Repository Layer]
+        ML[ML Prediction Service]
+    end
+
+    subgraph External["External Data"]
+        FastF1[FastF1 API]
+        F1_Official[F1 Timing Data]
+    end
+
+    subgraph Storage["Storage"]
+        FileStore[File Storage JSON]
+        Cache[FastF1 Cache]
+        Models[ML Models]
+    end
+
+    UI --> API_Client
+    API_Client -->|REST API| Routes
+    Routes --> Services
+    Services --> Repos
+    Services --> ML
+    Repos --> FileStore
+    Services -->|Data Ingestion| FastF1
+    FastF1 --> F1_Official
+    FastF1 --> Cache
+    ML --> Models
+```
+
+### Component Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant API
+    participant Service
+    participant FastF1
+    participant Storage
+
+    User->>Frontend: Select Session
+    Frontend->>API: POST /ingest/session
+    API->>Service: Ingest Request
+    Service->>FastF1: Fetch Session Data
+    FastF1-->>Service: Lap Times, Telemetry
+    Service->>Storage: Save JSON
+    Service-->>API: Session Created
+    API-->>Frontend: Session ID
+    Frontend->>API: GET /laps/{session_id}
+    API->>Storage: Read Laps
+    Storage-->>API: Lap Data
+    API-->>Frontend: JSON Response
+    Frontend->>User: Render D3 Chart
+```
 
 ## Tech Stack
 
@@ -90,7 +157,7 @@ This project includes a `render.yaml` blueprint for easy deployment:
 4. Render will auto-detect the `render.yaml` and create both services
 
 After deployment, configure environment variables in the Render dashboard:
-- `F1_CORS_ORIGINS` - Your frontend URL (e.g., `https://f1-dash-frontend.onrender.com`)
+- `F1_CORS_ORIGINS` - Your frontend URL (e.g., `https://f1-dash.live`)
 - `F1_API_KEYS` - Optional API keys for protected endpoints
 
 Update `frontend/config.js` with your backend URL:
@@ -170,7 +237,6 @@ pytest tests/unit/test_services.py -v
 
 ```
 f1-dash/
-├── ARCHITECTURE.md          # Detailed architecture documentation
 ├── README.md
 ├── render.yaml              # Render deployment blueprint
 ├── backend/
@@ -190,6 +256,8 @@ f1-dash/
 │   │   │   ├── file/        # File-based implementations
 │   │   │   └── interfaces/  # Abstract repository interfaces
 │   │   └── services/        # Business logic layer
+│   ├── data/
+│   │   └── models/          # Pre-trained ML models
 │   ├── tests/
 │   └── requirements.txt
 └── frontend/
@@ -202,18 +270,20 @@ f1-dash/
         └── utils/           # Utilities (colors, formatters, security)
 ```
 
-## Architecture
+## ML Predictions
 
-This application follows SOLID principles with a clean layered architecture:
+The prediction model uses XGBoost trained on historical race data (2023-2024 seasons):
 
-1. **API Layer** - FastAPI routes handling HTTP requests
-2. **Service Layer** - Business logic and data aggregation
-3. **Repository Layer** - Abstract data access with pluggable implementations
-4. **Domain Layer** - Pydantic models representing F1 concepts
+**Features (15 total):**
+- Best lap delta, average pace delta, consistency (std dev) for FP1, FP2, FP3
+- Session positions for each practice session
+- Long run pace delta for each session
 
-The repository pattern allows switching between storage backends (file-based JSON, DynamoDB, etc.) without changing business logic.
+**Model Performance:**
+- MAE: ~0.49 positions (training data)
+- 87% of predictions within 1 position
 
-For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+Pre-trained model files are included in `backend/data/models/` for production deployment.
 
 ## Data Sources
 
