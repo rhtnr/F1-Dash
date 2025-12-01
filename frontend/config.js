@@ -7,4 +7,4 @@
  */
 
 // Set your production API URL here
-window.F1_API_URL = 'http://localhost:8000/api/v1';
+window.F1_API_URL = 'https://f1-dash-api.onrender.com/api/v1';
