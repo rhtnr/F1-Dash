@@ -1,9 +1,32 @@
+# F1-Dash - Formula 1 Race Analysis Dashboard
+# https://f1-dash.live
+#
+# Project Metadata
+# ================
+# Name: F1-Dash
+# Description: A Python-backed D3.js web application for F1 enthusiasts to visualize
+#              lap times, tire strategies, telemetry, and race analytics with ML predictions.
+# Author: rhtnr
+# Repository: https://github.com/rhtnr/F1-Dash
+# License: MIT
+# Version: 1.0.0
+#
+# Tech Stack:
+#   - Backend: FastAPI, FastF1, XGBoost, Pydantic
+#   - Frontend: D3.js, Vanilla JavaScript, ES Modules
+#   - Deployment: Render (Web Service + Static Site)
+#
+# Topics: f1, formula1, fastapi, d3js, data-visualization, machine-learning,
+#         xgboost, python, javascript, race-predictions, telemetry, motorsport
+
 services:
   # Backend API
   - type: web
     name: f1-dash-api
     runtime: python
     rootDir: backend
+    plan: starter
+    region: oregon
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
@@ -23,6 +46,8 @@ services:
     name: f1-dash-frontend
     runtime: static
     rootDir: frontend
+    plan: starter
+    region: oregon
     buildCommand: echo "No build needed"
     staticPublishPath: .
     headers:
@@ -32,6 +57,12 @@ services:
       - path: /*
         name: X-Frame-Options
         value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
     routes:
       - type: rewrite
         source: /*
