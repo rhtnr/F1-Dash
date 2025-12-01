@@ -73,9 +73,9 @@ class Settings(BaseSettings):
 
     # Security Settings
     # API keys for protected endpoints (comma-separated in env var)
-    api_keys: list[str] = []
+    api_keys: str = ""
     # Trusted hosts (for production, set to your domain)
-    trusted_hosts: list[str] = ["localhost", "127.0.0.1"]
+    trusted_hosts: str = "localhost,127.0.0.1"
     # Enable rate limiting
     rate_limit_enabled: bool = True
     # Enable API key authentication for protected endpoints
@@ -84,13 +84,17 @@ class Settings(BaseSettings):
     # Logging
     log_level: str = "INFO"
 
-    @field_validator("api_keys", mode="before")
+    @field_validator("api_keys", mode="after")
     @classmethod
     def parse_api_keys(cls, v):
         """Parse comma-separated API keys from environment variable."""
         if isinstance(v, str):
+            if not v.strip():
+                return []
             return [k.strip() for k in v.split(",") if k.strip()]
-        return v or []
+        if isinstance(v, list):
+            return v
+        return []
 
     @field_validator("cors_origins", mode="after")
     @classmethod
@@ -115,13 +119,17 @@ class Settings(BaseSettings):
             return [o.strip() for o in v.split(",") if o.strip()]
         return []
 
-    @field_validator("trusted_hosts", mode="before")
+    @field_validator("trusted_hosts", mode="after")
     @classmethod
     def parse_trusted_hosts(cls, v):
         """Parse trusted hosts from string or list."""
         if isinstance(v, str):
+            if not v.strip():
+                return []
             return [h.strip() for h in v.split(",") if h.strip()]
-        return v
+        if isinstance(v, list):
+            return v
+        return []
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
